@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <mex_perfmonserver.h>
+#include <mex_perfmonchart.h>
 #include <QMessageBox>
 #include <QtSql>
 
@@ -17,11 +18,15 @@ class MEX_PerfMon : public QMainWindow
 public:
     explicit MEX_PerfMon(QWidget *parent = 0);
     ~MEX_PerfMon();
-
+signals:
+    void perfMonClosed();
+protected:
+    void  closeEvent(QCloseEvent*);
 public slots:
     void newStatus(QString text);
     void newData(QString data);
     void getError(QString socketerror);
+    void setEnabled();
 
 private slots:
     QSqlQuery executeQuery (QString sqlCommand, bool &ok);
@@ -33,6 +38,8 @@ private slots:
 
     void on_btnClear_clicked();
 
+    void on_pushButton_clicked();
+
 private:
     Ui::MEX_PerfMon *ui;
     // SQL-DB //
@@ -40,8 +47,6 @@ private:
     QList<QString> timestampList;
     QString txnID;
     int listIterator;
-    QDateTime oldTime;
-    QDateTime newTime;
 };
 
 #endif // MEX_PERFMON_H
